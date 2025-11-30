@@ -1,0 +1,9 @@
+# Local .vscode directories
+**/.vscode/*
+*.code-workspace
+
+# Mac OS X stuff...
+.DS_Store
+
+*.env
+**/.env

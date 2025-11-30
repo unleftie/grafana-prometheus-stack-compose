@@ -1,0 +1,93 @@
+name: ${PROJECT_TAG:-monitoring}
+
+services:
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
+    restart: unless-stopped
+    user: "nobody"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=90d"
+      - "--storage.tsdb.retention.size=20GB"
+    volumes:
+      - prometheus-data:/prometheus:rw
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    healthcheck:
+      test:
+        ["CMD", "wget", "-O", "/dev/null", "http://localhost:9090/-/healthy"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION:-latest}
+    restart: unless-stopped
+    user: "472"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana:rw
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test:
+        ["CMD", "wget", "-O", "/dev/null", "http://localhost:3000/api/health"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+  loki:
+    image: grafana/loki:${LOKI_VERSION:-latest}
+    restart: unless-stopped
+    command:
+      [
+        "--validation.discover-service-name=[]",
+        "--validation.discover-log-levels=false",
+        "-config.file=/etc/loki/loki.yaml",
+      ]
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/loki.yaml:ro
+    ports:
+      - "3100:3100"
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:3100/ready"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+  cadvisor:
+    container_name: ${PROJECT_TAG:-monitoring}-cadvisor
+    image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    command:
+      - "-housekeeping_interval=15s"
+      - "-docker_only=true"
+      - "-store_container_labels=false"
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:8080/healthz"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+volumes:
+  grafana-data:
+  prometheus-data:
