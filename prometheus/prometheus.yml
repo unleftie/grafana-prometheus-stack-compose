@@ -3,6 +3,9 @@ global:
   evaluation_interval: 15s
   scrape_timeout: 10s
 
+rule_files:
+  - "rules/*.yml"
+
 scrape_configs:
   - job_name: "prometheus"
     static_configs:
@@ -11,3 +14,64 @@ scrape_configs:
   - job_name: "cadvisor"
     static_configs:
       - targets: ["cadvisor:8080"]
+
+  - job_name: "node_exporter"
+    metrics_path: /metrics
+    file_sd_configs:
+      - files:
+          - "targets/node_exporter.yml"
+
+  - job_name: "blackbox_exporter"
+    static_configs:
+      - targets: ["blackbox-exporter:9115"]
+
+  # - job_name: "fail2ban_exporter"
+  #   metrics_path: /metrics
+  #   file_sd_configs:
+  #     - files:
+  #         - "targets/fail2ban_exporter.yml"
+
+  - job_name: "blackbox_http"
+    metrics_path: /probe
+    params:
+      module: [http]
+    file_sd_configs:
+      - files:
+          - "targets/blackbox_http.yml"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  - job_name: "blackbox_icmp"
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    file_sd_configs:
+      - files:
+          - "targets/blackbox_icmp.yml"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # - job_name: "blackbox_icmp_home"
+  #   metrics_path: /probe
+  #   params:
+  #     module: [icmp]
+  #   file_sd_configs:
+  #     - files:
+  #         - "targets/blackbox_icmp_home.yml"
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: blackbox-exporter:9115

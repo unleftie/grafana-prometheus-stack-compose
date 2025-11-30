@@ -6,7 +6,7 @@ datasources:
     type: prometheus
     access: proxy
     orgId: 1
-    uid: DS_PROMETHEUS_UID
+    uid: DS_PROMETHEUS
     url: http://prometheus:9090
     basicAuth: false
     isDefault: true

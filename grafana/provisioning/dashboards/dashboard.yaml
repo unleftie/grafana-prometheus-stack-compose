@@ -3,10 +3,28 @@ apiVersion: 1
 providers:
   - name: "Default"
     type: file
-    folder: "TestFolder"
-    folderUid: "folder-foo-uid"
+    folder: "default"
+    folderUid: "default-foo-uid"
     disableDeletion: false
-    updateIntervalSeconds: 10
+    updateIntervalSeconds: 60
     editable: true
     options:
-      path: /etc/grafana/provisioning/dashboards/definitions
+      path: /etc/grafana/provisioning/dashboards/default
+  - name: "SSH"
+    type: file
+    folder: "ssh"
+    folderUid: "ssh-foo-uid"
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/ssh
+  - name: "Blackbox"
+    type: file
+    folder: "blackbox"
+    folderUid: "blackbox-foo-uid"
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/blackbox

@@ -1,0 +1,8 @@
+# file should be renamed to *.yml
+
+- targets:
+    - "127.0.0.1:9100"
+  labels:
+    service: monitoring
+    env: prod
+    job: node_exporter

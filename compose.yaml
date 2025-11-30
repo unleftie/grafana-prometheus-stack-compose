@@ -15,6 +15,8 @@ services:
     volumes:
       - prometheus_data:/prometheus:rw
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      - ./prometheus/targets:/etc/prometheus/targets:ro
     ports:
       - "9090:9090"
     healthcheck:
@@ -79,6 +81,20 @@ services:
       - /etc/machine-id:/etc/machine-id:ro
     healthcheck:
       test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:8080/healthz"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_VERSION:-latest}
+    restart: unless-stopped
+    volumes:
+      - ./blackbox-exporter/config.yml:/etc/blackbox_exporter/config.yml:ro
+    ports:
+      - "9115:9115"
+    command: ["--config.file=/etc/blackbox_exporter/config.yml"]
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:9115/health"]
       interval: 120s
       timeout: 5s
       retries: 2
