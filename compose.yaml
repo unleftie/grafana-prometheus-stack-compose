@@ -6,10 +6,12 @@ services:
     restart: unless-stopped
     user: "nobody"
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=90d"
-      - "--storage.tsdb.retention.size=20GB"
+      [
+        "--config.file=/etc/prometheus/prometheus.yml",
+        "--storage.tsdb.path=/prometheus",
+        "--storage.tsdb.retention.time=90d",
+        "--storage.tsdb.retention.size=20GB",
+      ]
     volumes:
       - prometheus-data:/prometheus:rw
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -47,14 +49,9 @@ services:
   loki:
     image: grafana/loki:${LOKI_VERSION:-latest}
     restart: unless-stopped
-    command:
-      [
-        "--validation.discover-service-name=[]",
-        "--validation.discover-log-levels=false",
-        "-config.file=/etc/loki/loki.yaml",
-      ]
     volumes:
-      - ./loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - loki-data:/loki:rw
+      - ./loki/loki.yaml:/etc/loki/local-config.yaml:ro
     ports:
       - "3100:3100"
     healthcheck:
@@ -70,9 +67,11 @@ services:
     cap_add:
       - SYS_ADMIN
     command:
-      - "-housekeeping_interval=15s"
-      - "-docker_only=true"
-      - "-store_container_labels=false"
+      [
+        "-housekeeping_interval=15s",
+        "-docker_only=true",
+        "-store_container_labels=false",
+      ]
     devices:
       - /dev/kmsg
     volumes:
@@ -91,3 +90,4 @@ services:
 volumes:
   grafana-data:
   prometheus-data:
+  loki-data:
