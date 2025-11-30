@@ -13,7 +13,3 @@ cd grafana-prometheus-stack-compose
 cp .env.example .env
 docker compose up -d
 ```
-
-## 📝 License
-
-This project is licensed under the [MIT license](LICENSE).
