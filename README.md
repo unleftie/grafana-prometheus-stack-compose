@@ -16,4 +16,4 @@ docker compose up -d
 
 ## 📝 License
 
-This project is licensed under the [Apache License](LICENSE)..
+This project is licensed under the [MIT license](LICENSE).
