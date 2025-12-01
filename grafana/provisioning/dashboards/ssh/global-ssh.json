@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -106,7 +106,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -187,7 +187,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -268,7 +268,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -345,7 +345,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -422,7 +422,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -499,7 +499,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -576,7 +576,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "${DS_LOKI}"
       },
       "description": "",
       "fieldConfig": {
@@ -888,7 +888,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${datasource}"
+            "uid": "${DS_LOKI}"
           },
           "editorMode": "code",
           "expr": "sum by (instance) (count by (ip, instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |~\": Invalid|: Connection closed by authenticating user|: Failed\" |~\".* from .*\" | pattern `<_> from <ip> port` | __error__=\"\" [$__auto])) or count by (ip, instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |~\": Invalid|: Connection closed by authenticating user|: Failed\" !~\".* from .*\" | pattern `<_> user <_> <ip> port` | __error__=\"\" [$__auto]))) or on() vector(0)",
@@ -910,7 +910,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${datasource}"
+            "uid": "${DS_LOKI}"
           },
           "editorMode": "code",
           "expr": "count by (ip, instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |=\": Accepted\" | pattern `<_> Accepted <_> for <_> from <ip> port <_>` | __error__=\"\" [$__auto])) or on() vector(0)",
@@ -932,7 +932,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${datasource}"
+            "uid": "${DS_LOKI}"
           },
           "editorMode": "code",
           "expr": "sum by (instance) (count by (username, instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |=\": session opened for\" | pattern `<_> session opened for user <username>(` | username !~\".* by \" | __error__=\"\" [$__auto])) or count by (username, instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |=\": session opened for\" | pattern `<_> session opened for user <username> <_>` | username !~\".*(uid=.*)\" | __error__=\"\" [$__auto]))) or on() vector(0)",
@@ -1235,7 +1235,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${datasource}"
+            "uid": "${DS_LOKI}"
           },
           "editorMode": "code",
           "expr": "sum by(instance) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", syslog_identifier=\"sshd\"} |~\": Failed|: Invalid|: Connection closed by authenticating user\" | __error__=\"\" [$__auto]))",
@@ -1429,7 +1429,7 @@
         },
         "datasource": {
           "type": "loki",
-          "uid": "${datasource}"
+          "uid": "${DS_LOKI}"
         },
         "definition": "",
         "includeAll": false,
