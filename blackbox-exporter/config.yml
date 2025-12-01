@@ -6,7 +6,7 @@ modules:
       preferred_ip_protocol: "ip4"
       ip_protocol_fallback: false
       valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
-      method: GET
+      method: "GET"
       valid_status_codes: []
       fail_if_ssl: false
       fail_if_not_ssl: false
@@ -17,4 +17,4 @@ modules:
     prober: icmp
     timeout: 1s
     icmp:
-      preferred_ip_protocol: ip4
+      preferred_ip_protocol: "ip4"

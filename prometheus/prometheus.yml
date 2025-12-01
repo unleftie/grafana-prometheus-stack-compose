@@ -1,10 +1,13 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 30s
+  evaluation_interval: 1m
   scrape_timeout: 10s
 
 rule_files:
   - "rules/*.yml"
+  - "rules/*.yaml"
+  - "rules/*.rules"
 
 scrape_configs:
   - job_name: "prometheus"
@@ -16,7 +19,6 @@ scrape_configs:
       - targets: ["cadvisor:8080"]
 
   - job_name: "node_exporter"
-    metrics_path: /metrics
     file_sd_configs:
       - files:
           - "targets/node_exporter.yml"
@@ -26,10 +28,14 @@ scrape_configs:
       - targets: ["blackbox-exporter:9115"]
 
   # - job_name: "fail2ban_exporter"
-  #   metrics_path: /metrics
   #   file_sd_configs:
   #     - files:
   #         - "targets/fail2ban_exporter.yml"
+
+  # - job_name: "nginx_exporter"
+  #   file_sd_configs:
+  #     - files:
+  #         - "targets/nginx_exporter.yml"
 
   - job_name: "blackbox_http"
     metrics_path: /probe
