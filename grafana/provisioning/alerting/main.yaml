@@ -20,11 +20,13 @@ contactPoints:
       - uid: telegram_default_receiver
         type: telegram
         settings:
-          bottoken: "$GRAFANA_TELEGRAM_BOT_TOKEN"
-          chatid: "$GRAFANA_TELEGRAM_CHAT_ID"
+          bottoken: ${GRAFANA_TELEGRAM_BOT_TOKEN}
+          chatid: |
+            $GRAFANA_TELEGRAM_CHAT_ID
           message: |
             {{ template "telegram.default" . }}
           parse_mode: HTML
+          disable_web_page_preview: true
 
   - orgId: 1
     name: telegram_default_no_resolved
@@ -33,11 +35,13 @@ contactPoints:
         type: telegram
         disableResolveMessage: true
         settings:
-          bottoken: "$GRAFANA_TELEGRAM_BOT_TOKEN"
-          chatid: "$GRAFANA_TELEGRAM_CHAT_ID"
+          bottoken: ${GRAFANA_TELEGRAM_BOT_TOKEN}
+          chatid: |
+            $GRAFANA_TELEGRAM_CHAT_ID
           message: |
             {{ template "telegram.default" . }}
           parse_mode: HTML
+          disable_web_page_preview: true
 
   - orgId: 1
     name: telegram_home
@@ -45,11 +49,13 @@ contactPoints:
       - uid: telegram_home_receiver
         type: telegram
         settings:
-          bottoken: "$GRAFANA_TELEGRAM_BOT_TOKEN"
-          chatid: "$GRAFANA_TELEGRAM_HOME_CHAT_ID"
+          bottoken: ${GRAFANA_TELEGRAM_BOT_TOKEN}
+          chatid: |
+            $GRAFANA_TELEGRAM_HOME_CHAT_ID
           message: |
             {{ template "telegram_home.default" . }}
           parse_mode: HTML
+          disable_web_page_preview: true
 
 policies:
   - orgId: 1
