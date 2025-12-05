@@ -1,0 +1,57 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: blackbox_icmp_rules
+    folder: Monitoring
+    interval: 60s
+    disableProvenance: true
+    rules:
+      - uid: icmp_endpoint_down
+        title: ICMP Endpoint Down
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: DS_PROMETHEUS
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              expr: 'probe_success{job="blackbox_icmp"} == 0'
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: OK
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          summary: "ICMP request failure"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5m"
+        labels:
+          severity: error
+          env: prod
+      - uid: slow_ping
+        title: Slow Ping
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: DS_PROMETHEUS
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              expr: "avg_over_time(probe_icmp_duration_seconds[1m]) > 1"
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: OK
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          summary: "Blackbox probe slow ping"
+          description: "Ping took more than 1s\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        labels:
+          severity: error
+          env: prod
