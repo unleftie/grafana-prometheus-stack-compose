@@ -5,6 +5,8 @@ services:
     image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
     restart: unless-stopped
     user: "nobody"
+    env_file:
+      - .env
     command:
       [
         "--config.file=/etc/prometheus/prometheus.yml",
@@ -33,6 +35,8 @@ services:
     user: "472"
     depends_on:
       - prometheus
+    env_file:
+      - .env
     volumes:
       - grafana_data:/var/lib/grafana:rw
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
@@ -49,10 +53,14 @@ services:
   grafana-image-renderer:
     image: grafana/grafana-image-renderer:${GRAFANA_IMAGE_RENDERER_VERSION:-latest}
     restart: unless-stopped
+    env_file:
+      - .env
 
   loki:
     image: grafana/loki:${LOKI_VERSION:-latest}
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - loki_data:/loki:rw
       # - ./loki:/etc/loki:ro
@@ -68,6 +76,8 @@ services:
     container_name: ${PROJECT_TAG:-monitoring}-cadvisor
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
     restart: unless-stopped
+    env_file:
+      - .env
     cap_add:
       - SYS_ADMIN
     # https://github.com/google/cadvisor/blob/master/docs/runtime_options.md
@@ -95,6 +105,8 @@ services:
   blackbox-exporter:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_VERSION:-latest}
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - ./blackbox-exporter/config.yml:/etc/blackbox_exporter/config.yml:ro
     ports:
