@@ -73,21 +73,18 @@ policies:
         continue: false
         matchers:
           - no_resolved = true
-          - env =~ "dev|prod"
           - severity = error
           - receiver = telegram
 
       - receiver: telegram
         continue: false
         matchers:
-          - env =~ "dev|prod"
           - severity = error
           - receiver = telegram
 
       - receiver: telegram_home
         continue: false
         matchers:
-          - env =~ "dev|prod"
           - severity = error
           - receiver = telegram_home
 

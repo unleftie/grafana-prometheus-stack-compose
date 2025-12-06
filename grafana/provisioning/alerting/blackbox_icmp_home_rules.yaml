@@ -1,0 +1,36 @@
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#alerting
+# https://grafana.com/docs/grafana/latest/alerting/set-up/provision-alerting-resources/file-provisioning
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: blackbox_icmp_home_rules
+    folder: blackbox
+    interval: 60s
+    rules:
+      - uid: router_not_responding
+        title: Роутер Не Відповідає
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: DS_PROMETHEUS
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              expr: 'probe_success{job="blackbox_icmp_home", env="telegram_home"} == 0'
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        dashboardUid: CHANGE_ME
+        noDataState: OK
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          summary: "Немає зв`язку з домашнім роутером більш ніж 5 хвилин"
+          description: "Немає зв`язку з домашнім роутером більш ніж 5 хвилин\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        labels:
+          severity: error
+          receiver: telegram_home
+        isPaused: false

@@ -32,7 +32,6 @@ groups:
           description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5m"
         labels:
           severity: error
-          env: prod
           receiver: telegram
         isPaused: false
       - uid: slow_ping
@@ -59,6 +58,5 @@ groups:
           description: "Ping took more than 1s\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
         labels:
           severity: error
-          env: prod
           receiver: telegram
         isPaused: false
