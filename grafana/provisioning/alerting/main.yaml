@@ -96,11 +96,10 @@ templates:
       {{ range .Alerts }}
       {{ if eq .Status "firing" }}🚨 {{ .Status | toUpper }} 🚨 {{ else }}✅ {{ .Status | toUpper }} ✅ {{ end }}
       ALERTNAME: {{ .Labels.alertname }}
-      SUMMARY: {{ .Annotations.summary }}
-      SERVICE: {{ .Labels.service }}
-      ENV: {{ .Labels.env }}
+      {{ if .Annotations.summary }}SUMMARY: {{ .Annotations.summary }}{{ end }}
+      {{ if .Labels.service }}SERVICE: {{ .Labels.service }}{{ end }}
+      {{ if .Labels.env }}ENV: {{ .Labels.env }}{{ end }}
       {{ if eq .Status "firing" }}STARTS AT: {{ .StartsAt.Local }} {{ else }}ENDS AT: {{ .EndsAt.Local }} {{ end }}
-      {{ if .DashboardURL }}<a href="{{ .DashboardURL }}">View Dashboard</a>{{ end }}
       {{ end }}
       {{ end }}
 
@@ -110,8 +109,8 @@ templates:
       {{ define "telegram_home.default" }}
       {{ range .Alerts }}
       {{ if eq .Status "firing" }}🚨 {{ "ТРИВОГА" }} 🚨 {{ else }}✅ {{ "ВІДБІЙ ТРИВОГИ" }} ✅ {{ end }}
-      ПРОБЛЕМА: {{ .Annotations.summary }}
-      СЕРВІС: {{ .Labels.service }}
+      {{ if .Annotations.summary }}ПРОБЛЕМА: {{ .Annotations.summary }}{{ end }}
+      {{ if .Labels.service }}СЕРВІС: {{ .Labels.service }}{{ end }}
       {{ if eq .Status "firing" }}ПОЧАТОК: {{ .StartsAt.Local }} {{ else }}ЗАКІНЧЕННЯ: {{ .EndsAt.Local }} {{ end }}
       {{ end }}
       {{ end }}
