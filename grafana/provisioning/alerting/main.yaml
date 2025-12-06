@@ -94,14 +94,13 @@ templates:
     template: |
       {{ define "telegram.default" }}
       {{ range .Alerts }}
-      <b>{{ .Labels.alertname }}</b>
-      {{ if .Labels.severity }}<b>Severity:</b> {{ .Labels.severity }}{{ end }}
-      {{ if .Labels.instance }}<b>Instance:</b> {{ .Labels.instance }}{{ end }}
-      {{ if .Annotations.summary }}<b>Summary:</b> {{ .Annotations.summary }}{{ end }}
-      {{ if .Annotations.description }}<b>Description:</b> {{ .Annotations.description }}{{ end }}
-      <b>Status:</b> {{ .Status }}
+      {{ if eq .Status "firing" }}🚨 {{ .Status | toUpper }} 🚨 {{ else }}✅ {{ .Status | toUpper }} ✅ {{ end }}
+      ALERTNAME: {{ .Labels.alertname }}
+      SUMMARY: {{ .Annotations.summary }}
+      SERVICE: {{ .Labels.service }}
+      ENV: {{ .Labels.env }}
+      {{ if eq .Status "firing" }}STARTS AT: {{ .StartsAt.Local }} {{ else }}ENDS AT: {{ .EndsAt.Local }} {{ end }}
       {{ if .DashboardURL }}<a href="{{ .DashboardURL }}">View Dashboard</a>{{ end }}
-      {{ if .PanelURL }}<a href="{{ .PanelURL }}">View Panel</a>{{ end }}
       {{ end }}
       {{ end }}
 
@@ -110,11 +109,9 @@ templates:
     template: |
       {{ define "telegram_home.default" }}
       {{ range .Alerts }}
-      🏠 <b>Home Alert: {{ .Labels.alertname }}</b>
-      {{ if .Labels.severity }}<b>Severity:</b> {{ .Labels.severity }}{{ end }}
-      {{ if .Labels.instance }}<b>Instance:</b> {{ .Labels.instance }}{{ end }}
-      {{ if .Annotations.summary }}<b>Summary:</b> {{ .Annotations.summary }}{{ end }}
-      {{ if .Annotations.description }}<b>Description:</b> {{ .Annotations.description }}{{ end }}
-      <b>Status:</b> {{ .Status }}
+      {{ if eq .Status "firing" }}🚨 {{ "ТРИВОГА" }} 🚨 {{ else }}✅ {{ "ВІДБІЙ ТРИВОГИ" }} ✅ {{ end }}
+      ПРОБЛЕМА: {{ .Annotations.summary }}
+      СЕРВІС: {{ .Labels.service }}
+      {{ if eq .Status "firing" }}ПОЧАТОК: {{ .StartsAt.Local }} {{ else }}ЗАКІНЧЕННЯ: {{ .EndsAt.Local }} {{ end }}
       {{ end }}
       {{ end }}
