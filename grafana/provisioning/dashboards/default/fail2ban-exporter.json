@@ -864,7 +864,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "fail2ban",
-  "uid": "cTkH9AT7z",
+  "uid": "fail2ban-exporter",
   "version": 2,
   "weekStart": ""
 }
