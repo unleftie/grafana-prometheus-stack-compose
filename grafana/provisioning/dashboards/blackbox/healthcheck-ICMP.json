@@ -670,7 +670,7 @@
   },
   "timezone": "",
   "title": "healthcheck [ICMP]",
-  "uid": "adipn3vjwxds0b",
+  "uid": "healthcheck-icmp",
   "version": 11,
   "weekStart": ""
 }

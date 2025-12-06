@@ -6,7 +6,6 @@ prune: true
 providers:
   - name: "Default"
     folder: "default"
-    folderUid: "default-dashboards-uid"
     type: file
     disableDeletion: false
     updateIntervalSeconds: 60
@@ -15,7 +14,6 @@ providers:
       path: /etc/grafana/provisioning/dashboards/default
   - name: "SSH"
     folder: "ssh"
-    folderUid: "ssh-dashboards-uid"
     type: file
     disableDeletion: false
     updateIntervalSeconds: 60
@@ -24,7 +22,6 @@ providers:
       path: /etc/grafana/provisioning/dashboards/ssh
   - name: "Blackbox"
     folder: "blackbox"
-    folderUid: "blackbox-dashboards-uid"
     type: file
     disableDeletion: false
     updateIntervalSeconds: 60

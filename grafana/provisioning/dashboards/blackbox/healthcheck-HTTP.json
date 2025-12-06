@@ -969,7 +969,7 @@
   },
   "timezone": "",
   "title": "healthcheck [HTTP]",
-  "uid": "bdipmsu2nl91ca",
+  "uid": "healthcheck-http",
   "version": 8,
   "weekStart": ""
 }

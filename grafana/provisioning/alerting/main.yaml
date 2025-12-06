@@ -17,9 +17,9 @@ contactPoints:
           addresses: blackhole@localhost
 
   - orgId: 1
-    name: telegram_default
+    name: telegram
     receivers:
-      - uid: telegram_default_receiver
+      - uid: telegram_receiver
         type: telegram
         settings:
           bottoken: ${GRAFANA_TELEGRAM_BOT_TOKEN}
@@ -31,7 +31,7 @@ contactPoints:
           disable_web_page_preview: true
 
   - orgId: 1
-    name: telegram_default_no_resolved
+    name: telegram_no_resolved
     receivers:
       - uid: telegram_no_resolved_receiver
         type: telegram
@@ -69,27 +69,31 @@ policies:
     group_interval: 15s
     repeat_interval: 24h
     routes:
-      - receiver: telegram_default_no_resolved
+      - receiver: telegram_no_resolved
         continue: false
         matchers:
-          - env =~ "prod|dev"
+          - no_resolved = true
+          - env =~ "dev|prod"
           - severity = error
-          - no_resolved = "true"
+          - receiver = telegram
 
-      - receiver: telegram_default
+      - receiver: telegram
         continue: false
         matchers:
-          - env =~ "prod|dev"
+          - env =~ "dev|prod"
           - severity = error
+          - receiver = telegram
 
       - receiver: telegram_home
         continue: false
         matchers:
-          - env = telegram_home
+          - env =~ "dev|prod"
+          - severity = error
+          - receiver = telegram_home
 
 templates:
   - orgId: 1
-    name: telegram_default
+    name: telegram
     template: |
       {{ define "telegram.default" }}
       {{ range .Alerts }}
@@ -105,7 +109,7 @@ templates:
       {{ end }}
 
   - orgId: 1
-    name: telegram_home_default
+    name: telegram_home
     template: |
       {{ define "telegram_home.default" }}
       {{ range .Alerts }}
