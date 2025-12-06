@@ -35,7 +35,7 @@ groups:
           env: prod
           receiver: telegram
         isPaused: false
-      - uid: prometheus_configuration_reload_failure
+      - uid: prometheus_config_reload_failure
         title: Prometheus Configuration Reload Failure
         condition: A
         data:
@@ -72,7 +72,7 @@ groups:
               from: 600
               to: 0
             model:
-              expr: 'changes(process_start_time_seconds{job=~"prometheus|pushgateway|alertmanager"}[15m]) > 4'
+              expr: 'changes(process_start_time_seconds{job=~"prometheus|pushgateway"}[15m]) > 4'
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
@@ -143,61 +143,7 @@ groups:
           env: prod
           receiver: telegram
         isPaused: false
-      - uid: prometheus_alertmanager_job_missing
-        title: Prometheus AlertManager Job Missing
-        condition: A
-        data:
-          - refId: A
-            datasourceUid: DS_PROMETHEUS
-            relativeTimeRange:
-              from: 600
-              to: 0
-            model:
-              expr: 'absent(up{job=''alertmanager''})'
-              instant: true
-              intervalMs: 1000
-              maxDataPoints: 43200
-              refId: A
-        dashboardUid: CHANGE_ME
-        noDataState: OK
-        execErrState: Alerting
-        for: 5m
-        annotations:
-          summary: "Prometheus AlertManager job missing (instance {{ $labels.instance }})"
-          description: "A Prometheus AlertManager job has disappeared\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-        labels:
-          severity: error
-          env: prod
-          receiver: telegram
-        isPaused: false
-      - uid: prometheus_not_connected_to_alertmanager
-        title: Prometheus Not Connected To Alertmanager
-        condition: A
-        data:
-          - refId: A
-            datasourceUid: DS_PROMETHEUS
-            relativeTimeRange:
-              from: 600
-              to: 0
-            model:
-              expr: 'prometheus_notifications_alertmanagers_discovered < 1'
-              instant: true
-              intervalMs: 1000
-              maxDataPoints: 43200
-              refId: A
-        dashboardUid: CHANGE_ME
-        noDataState: OK
-        execErrState: Alerting
-        for: 5m
-        annotations:
-          summary: "Prometheus not connected to alertmanager (instance {{ $labels.instance }})"
-          description: "Prometheus cannot connect the alertmanager\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-        labels:
-          severity: error
-          env: prod
-          receiver: telegram
-        isPaused: false
-      - uid: prometheus_template_text_expansion_failures
+      - uid: prometheus_template_expansion_failures
         title: Prometheus Template Text Expansion Failures
         condition: A
         data:
@@ -251,34 +197,7 @@ groups:
           env: prod
           receiver: telegram
         isPaused: false
-      - uid: prometheus_alertmanager_notification_failing
-        title: Prometheus AlertManager Notification Failing
-        condition: A
-        data:
-          - refId: A
-            datasourceUid: DS_PROMETHEUS
-            relativeTimeRange:
-              from: 600
-              to: 0
-            model:
-              expr: 'rate(alertmanager_notifications_failed_total[1m]) > 0'
-              instant: true
-              intervalMs: 1000
-              maxDataPoints: 43200
-              refId: A
-        dashboardUid: CHANGE_ME
-        noDataState: OK
-        execErrState: Alerting
-        for: 0m
-        annotations:
-          summary: "Prometheus AlertManager notification failing (instance {{ $labels.instance }})"
-          description: "Alertmanager is failing sending notifications\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-        labels:
-          severity: error
-          env: prod
-          receiver: telegram
-        isPaused: false
-      - uid: prometheus_tsdb_checkpoint_creation_failures
+      - uid: prometheus_tsdb_checkpoint_create_fail
         title: Prometheus TSDB Checkpoint Creation Failures
         condition: A
         data:
@@ -305,7 +224,7 @@ groups:
           env: prod
           receiver: telegram
         isPaused: false
-      - uid: prometheus_tsdb_checkpoint_deletion_failures
+      - uid: prometheus_tsdb_checkpoint_delete_fail
         title: Prometheus TSDB Checkpoint Deletion Failures
         condition: A
         data:
@@ -359,7 +278,7 @@ groups:
           env: prod
           receiver: telegram
         isPaused: false
-      - uid: prometheus_tsdb_head_truncations_failed
+      - uid: prometheus_tsdb_head_truncation_fail
         title: Prometheus TSDB Head Truncations Failed
         condition: A
         data:

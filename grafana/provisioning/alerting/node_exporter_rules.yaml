@@ -112,7 +112,7 @@ groups:
           severity: error
           receiver: telegram
         isPaused: false
-      - uid: instance_filesystem_space_filling_up_24h
+      - uid: instance_filesystem_filling_up_24h
         title: Instance Filesystem Space Filling Up (24h)
         condition: A
         data:
@@ -145,7 +145,7 @@ groups:
           severity: warn
           receiver: telegram
         isPaused: false
-      - uid: instance_filesystem_space_filling_up_12h
+      - uid: instance_filesystem_filling_up_12h
         title: Instance Filesystem Space Filling Up (12h)
         condition: A
         data:
@@ -178,7 +178,7 @@ groups:
           severity: error
           receiver: telegram
         isPaused: false
-      - uid: instance_filesystem_almost_out_of_space
+      - uid: instance_filesystem_almost_full
         title: Instance Filesystem Almost Out Of Space
         condition: A
         data:
@@ -344,7 +344,7 @@ groups:
           severity: error
           receiver: telegram
         isPaused: false
-      - uid: instance_high_number_conntrack_entries_used
+      - uid: high_number_conntrack
         title: Instance High Number Conntrack Entries Used
         condition: A
         data:
