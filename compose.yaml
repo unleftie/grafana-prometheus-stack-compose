@@ -71,6 +71,9 @@ services:
       timeout: 5s
       retries: 2
 
+  # FIXME: container health checks merged in the latest release
+  # https://github.com/google/cadvisor/releases/tag/v0.54.0
+  # https://github.com/google/cadvisor/pull/3640
   cadvisor:
     container_name: ${PROJECT_TAG:-monitoring}-cadvisor
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
