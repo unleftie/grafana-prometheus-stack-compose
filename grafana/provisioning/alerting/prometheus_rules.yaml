@@ -85,7 +85,7 @@ groups:
           summary: "Prometheus too many restarts (instance {{ $labels.instance }})"
           description: "Prometheus has restarted more than twice in the last 15 minutes. It might be crashlooping.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
         labels:
-          severity: warn
+          severity: error
           env: prod
           receiver: telegram
         isPaused: false

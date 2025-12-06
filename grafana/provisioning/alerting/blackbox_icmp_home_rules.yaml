@@ -18,7 +18,7 @@ groups:
               from: 600
               to: 0
             model:
-              expr: 'probe_success{job="blackbox_icmp_home", env="telegram_home"} == 0'
+              expr: 'probe_success{job="blackbox_icmp_home"} == 0'
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
