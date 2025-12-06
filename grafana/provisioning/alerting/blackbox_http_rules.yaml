@@ -23,7 +23,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-http
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -49,7 +49,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-http
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -75,7 +75,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-http
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -101,7 +101,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-http
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -127,7 +127,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-http
         noDataState: OK
         execErrState: Alerting
         for: 5m

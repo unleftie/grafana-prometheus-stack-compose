@@ -23,7 +23,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -49,7 +49,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -75,7 +75,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -101,7 +101,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -134,7 +134,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 1h
@@ -167,7 +167,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 1h
@@ -198,7 +198,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -229,7 +229,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -255,7 +255,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -281,7 +281,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -307,7 +307,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 1h
@@ -333,7 +333,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 1h
@@ -359,7 +359,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -385,7 +385,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 10m
@@ -411,7 +411,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 20m
@@ -437,7 +437,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -463,7 +463,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -489,7 +489,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -515,7 +515,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -541,7 +541,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 2m
@@ -567,7 +567,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -593,7 +593,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 5m
@@ -619,7 +619,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -645,7 +645,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m
@@ -671,7 +671,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: node-exporter-full
         noDataState: OK
         execErrState: Alerting
         for: 0m

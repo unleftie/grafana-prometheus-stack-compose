@@ -23,7 +23,7 @@ groups:
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
-        dashboardUid: CHANGE_ME
+        dashboardUid: healthcheck-icmp
         noDataState: OK
         execErrState: Alerting
         for: 5m

@@ -28,3 +28,19 @@ providers:
     editable: true
     options:
       path: /etc/grafana/provisioning/dashboards/blackbox
+  - name: "Self-monitoring"
+    folder: "self_monitoring"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/self_monitoring
+  - name: "Node Exporter"
+    folder: "node_exporter"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/node_exporter
