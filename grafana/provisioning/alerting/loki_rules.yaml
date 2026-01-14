@@ -1,0 +1,37 @@
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#alerting
+# https://grafana.com/docs/grafana/latest/alerting/set-up/provision-alerting-resources/file-provisioning
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: ssh_rules
+    folder: ssh
+    interval: 60s
+    rules:
+      - uid: ssh_new_session
+        title: New SSH Session
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: DS_LOKI
+            relativeTimeRange:
+              from: 600
+              to: 0
+            model:
+              expr: count_over_time({exporter="alloy", job="loki.source.journal.read", syslog_identifier="sshd"} |="session opened for" != "sftp" [5m]) > 0
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        dashboardUid: global-ssh
+        noDataState: OK
+        execErrState: Alerting
+        for: 1m
+        annotations:
+          summary: "A new SSH session was opened"
+          description: "A new SSH session was opened on {{ $labels.instance }}."
+        labels:
+          severity: error
+          receiver: telegram
+          no_resolved: true
+        isPaused: false
