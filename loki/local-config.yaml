@@ -2,7 +2,16 @@
 auth_enabled: false
 
 server:
+  http_listen_address: 0.0.0.0
   http_listen_port: 3100
+  log_level: warn
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
 
 common:
   instance_addr: 127.0.0.1
@@ -25,8 +34,9 @@ schema_config:
       index:
         prefix: index_
         period: 24h
-# ruler:
-#   alertmanager_url: http://localhost:9093
+
+limits_config:
+  retention_period: 7d
 
 analytics:
   reporting_enabled: false
