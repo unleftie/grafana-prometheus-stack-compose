@@ -1,0 +1,73 @@
+global:
+  resolve_timeout: 3m
+templates:
+  - "/etc/alertmanager/templates/*.tmpl"
+receivers:
+  - name: blackhole
+  - name: telegram_default
+    telegram_configs:
+      - bot_token: ${ALERTMANAGER_TELEGRAM_BOT_TOKEN}
+        chat_id: ${ALERTMANAGER_TELEGRAM_CHAT_ID}
+        http_config:
+          follow_redirects: true
+        message: '{{ template "telegram.default" .}}'
+        parse_mode: HTML
+        send_resolved: true
+  - name: telegram_default_no_resolved
+    telegram_configs:
+      - bot_token: ${ALERTMANAGER_TELEGRAM_BOT_TOKEN}
+        chat_id: ${ALERTMANAGER_TELEGRAM_CHAT_ID}
+        http_config:
+          follow_redirects: true
+        message: '{{ template "telegram.default" .}}'
+        parse_mode: HTML
+        send_resolved: false
+  - name: telegram_home
+    telegram_configs:
+      - bot_token: ${ALERTMANAGER_TELEGRAM_BOT_TOKEN}
+        chat_id: ${ALERTMANAGER_TELEGRAM_HOME_CHAT_ID}
+        http_config:
+          follow_redirects: true
+        message: '{{ template "telegram_home.default" .}}'
+        parse_mode: HTML
+        send_resolved: true
+
+route:
+  group_by:
+    - job
+    - alertname
+  group_interval: 15s
+  group_wait: 15s
+  receiver: blackhole
+  repeat_interval: 24h
+  routes:
+    - group_by:
+        - job
+        - alertname
+      group_interval: 15s
+      group_wait: 15s
+      match:
+        env: telegram_home
+      receiver: telegram_home
+      repeat_interval: 24h
+    - group_by:
+        - job
+        - alertname
+      group_interval: 15s
+      group_wait: 15s
+      match_re:
+        env: prod|dev
+        no_resolved: true
+        severity: error
+      receiver: telegram_default_no_resolved
+      repeat_interval: 24h
+    - group_by:
+        - job
+        - alertname
+      group_interval: 15s
+      group_wait: 15s
+      match_re:
+        env: prod|dev
+        severity: error
+      receiver: telegram_default
+      repeat_interval: 24h

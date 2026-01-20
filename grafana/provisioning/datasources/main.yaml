@@ -27,3 +27,16 @@ datasources:
     isDefault: false
     version: 1
     editable: false
+  - name: Alertmanager
+    type: alertmanager
+    access: proxy
+    orgId: 1
+    uid: DS_ALERTMANAGER
+    url: http://alertmanager:9093
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: false
+    jsonData:
+      implementation: prometheus
+      handleGrafanaManagedAlerts: false

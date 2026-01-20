@@ -9,7 +9,7 @@ services:
       - .env
     command:
       [
-        "--config.file=/etc/prometheus/prometheus.yml",
+        "--config.file=/etc/prometheus/config.yml",
         "--log.level=warn",
         "--storage.tsdb.path=/prometheus",
         "--storage.tsdb.retention.time=90d",
@@ -17,13 +17,42 @@ services:
       ]
     volumes:
       - prometheus_data:/prometheus:rw
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/config.yml:/etc/prometheus/config.yml:ro
       - ./prometheus/targets:/etc/prometheus/targets:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
     ports:
       - "9090:9090"
     healthcheck:
       test:
         ["CMD", "wget", "-O", "/dev/null", "http://localhost:9090/-/healthy"]
+      interval: 120s
+      timeout: 5s
+      retries: 2
+
+  alertmanager:
+    image: prom/alertmanager:${ALERTMANAGER_VERSION:-latest}
+    restart: unless-stopped
+    user: "nobody"
+    env_file:
+      - .env
+      - ./alertmanager/.env
+    volumes:
+      - ./alertmanager/config.yml.tmpl:/etc/alertmanager/config.yml.tmpl:ro
+      - ./alertmanager/templates:/etc/alertmanager/templates:ro
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        cat /etc/alertmanager/config.yml.tmpl | sed \
+          -e "s|\$${ALERTMANAGER_TELEGRAM_BOT_TOKEN}|$$ALERTMANAGER_TELEGRAM_BOT_TOKEN|g" \
+          -e "s|\$${ALERTMANAGER_TELEGRAM_CHAT_ID}|$$ALERTMANAGER_TELEGRAM_CHAT_ID|g" \
+          -e "s|\$${ALERTMANAGER_TELEGRAM_HOME_CHAT_ID}|$$ALERTMANAGER_TELEGRAM_HOME_CHAT_ID|g" \
+          > /tmp/config.yml && \
+        exec /bin/alertmanager --config.file=/tmp/config.yml --log.level=warn
+    ports:
+      - "9093:9093"
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:9093/-/ready"]
       interval: 120s
       timeout: 5s
       retries: 2
@@ -63,7 +92,7 @@ services:
       - .env
     volumes:
       - loki_data:/loki:rw
-      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+      - ./loki/config.yaml:/etc/loki/local-config.yaml:ro
     ports:
       - "3100:3100"
     healthcheck:
