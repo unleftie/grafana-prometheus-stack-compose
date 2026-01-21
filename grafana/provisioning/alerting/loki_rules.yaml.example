@@ -18,7 +18,7 @@ groups:
               from: 600
               to: 0
             model:
-              expr: count_over_time({exporter="alloy", job="loki.source.journal.read", syslog_identifier="sshd"} |= `Accepted` | pattern `Accepted <method> for <user> from <ip> port <port> ssh2` | method =~ `publickey|password` | user !~ `${LOKI_SSH_EXCLUDE_USERS}` | ip != ip(`${LOKI_SSH_EXCLUDE_IP_1}`) | ip != ip(`${LOKI_SSH_EXCLUDE_IP_2}`) [5m]) > 0
+              expr: count_over_time({exporter="alloy", job="loki.source.journal.read", syslog_identifier="sshd"} |= `Accepted` | pattern `Accepted <method> for <user> from <ip> port <port> ssh2` | method =~ `publickey|password` | user !~ `sftp|sftpuser` | ip != ip(`127.0.0.1`) | ip != ip(`10.10.10.1/24`) [5m]) > 0
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200

@@ -95,11 +95,6 @@ services:
       - ./loki/config.yaml:/etc/loki/local-config.yaml:ro
     ports:
       - "3100:3100"
-    healthcheck:
-      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:3100/ready"]
-      interval: 120s
-      timeout: 5s
-      retries: 2
 
   # FIXME: container health checks merged in the latest release
   # https://github.com/google/cadvisor/releases/tag/v0.54.0
