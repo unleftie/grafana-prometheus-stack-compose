@@ -18,7 +18,7 @@ groups:
               from: 600
               to: 0
             model:
-              expr: count_over_time({exporter="alloy", job="loki.source.journal.read", syslog_identifier="sshd"} |="session opened for" != "sftp" [5m]) > 0
+              expr: count_over_time({exporter="alloy", job="loki.source.journal.read", syslog_identifier="sshd"} |= `Accepted` | pattern `Accepted <method> for <user> from <ip> port <port> ssh2` | method =~ `publickey|password` | user !~ `${LOKI_SSH_EXCLUDE_USERS}` | ip != ip(`${LOKI_SSH_EXCLUDE_IP_1}`) | ip != ip(`${LOKI_SSH_EXCLUDE_IP_2}`) [5m]) > 0
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
@@ -29,7 +29,7 @@ groups:
         for: 1m
         annotations:
           summary: "A new SSH session was opened"
-          description: "A new SSH session was opened on {{ $labels.instance }}."
+          description: "A new SSH session was opened on {{ $labels.service }} by user {{ $labels.user }} from IP {{ $labels.ip }}."
         labels:
           severity: error
           receiver: telegram
