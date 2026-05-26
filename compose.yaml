@@ -84,6 +84,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - ./grafana/.env
 
   loki:
     image: grafana/loki:${LOKI_VERSION:-latest}
