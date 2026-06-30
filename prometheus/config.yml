@@ -29,8 +29,9 @@ scrape_configs:
       - targets: ["grafana:3000"]
 
   - job_name: "cadvisor"
-    static_configs:
-      - targets: ["cadvisor:8080"]
+    file_sd_configs:
+      - files:
+          - "targets/cadvisor.yml"
 
   - job_name: "node_exporter"
     file_sd_configs:
