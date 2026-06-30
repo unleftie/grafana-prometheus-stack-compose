@@ -2,7 +2,7 @@
   "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "name": "cadvisor-imported-id-19724-rev-1",
+    "name": "cadvisor-id-19724-rev-1",
     "generation": 1,
     "creationTimestamp": "2026-06-30T18:56:21Z",
     "labels": {},
@@ -2687,7 +2687,7 @@
       "hideTimepicker": false,
       "fiscalYearStartMonth": 0
     },
-    "title": "cAdvisor2",
+    "title": "cAdvisor",
     "variables": [
       {
         "kind": "IntervalVariable",
