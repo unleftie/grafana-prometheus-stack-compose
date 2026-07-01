@@ -1,0 +1,11 @@
+groups:
+  - name: cadvisor
+    rules:
+      - alert: ContainerUnhealthy
+        expr: "container_health_state == 0"
+        for: 5m
+        labels:
+          severity: error
+        annotations:
+          summary: "Container is unhealthy"
+          description: "Container {{ $labels.name }} on {{ $labels.instance }} has been reporting an unhealthy Docker health check status for more than 5m"
