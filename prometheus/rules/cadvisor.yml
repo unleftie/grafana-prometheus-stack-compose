@@ -7,5 +7,41 @@ groups:
         labels:
           severity: error
         annotations:
-          summary: "Container is unhealthy"
+          summary: "Container {{ $labels.name }} is unhealthy"
           description: "Container {{ $labels.name }} on {{ $labels.instance }} has been reporting an unhealthy Docker health check status for more than 5m"
+
+      - alert: CadvisorDown
+        expr: up{job="cadvisor"} == 0
+        for: 1m
+        labels:
+          severity: error
+        annotations:
+          summary: "cAdvisor {{ $labels.instance }} is down"
+          description: "cAdvisor {{ $labels.instance }} has been down for more than 1m"
+
+      - alert: ContainerMemoryAlmostOutOfSpace
+        expr: 'sum(100 - (((container_spec_memory_limit_bytes{name=~".+",image!=""} != 0) - container_memory_usage_bytes{name=~".+",image!=""}) * 100 / container_spec_memory_limit_bytes{name=~".+",image!=""})) by (name, instance) > 95'
+        for: 5m
+        labels:
+          severity: error
+        annotations:
+          summary: "Container {{ $labels.name }} has less than 5% memory left"
+          description: 'Container {{ $labels.name }} on {{ $labels.instance }} has used {{ printf "%.2f" $value }}% of its memory limit for more than 5m'
+
+      - alert: ContainerRestarting
+        expr: increase(container_start_time_seconds{name!=""}[10m]) > 0
+        for: 0m
+        labels:
+          severity: error
+        annotations:
+          summary: "Container {{ $labels.name }} restarting"
+          description: "Container {{ $labels.name }} has restarted in the last 10 minutes."
+
+      - alert: ContainerHighCpuUsage
+        expr: rate(container_cpu_usage_seconds_total{name!=""}[1m]) * 100 > 90
+        for: 15m
+        labels:
+          severity: error
+        annotations:
+          summary: "Container {{ $labels.name }} high CPU usage"
+          description: "Container {{ $labels.name }} on {{ $labels.instance }} CPU usage is above 90% for more than 15 minutes."
