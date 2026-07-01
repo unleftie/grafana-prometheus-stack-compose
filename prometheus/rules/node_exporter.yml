@@ -218,3 +218,39 @@ groups:
         annotations:
           summary: Host OOM kill detected
           description: "OOM kill detected\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostNodeOvertemperatureAlarm
+        expr: ((node_hwmon_temp_crit_alarm_celsius == 1) or (node_hwmon_temp_alarm == 1))
+        for: 0m
+        labels:
+          severity: error
+        annotations:
+          summary: Host node overtemperature alarm (instance {{ $labels.instance }})
+          description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostSoftwareRAIDInsufficientDrives
+        expr: ((node_md_disks_required - ignoring(state) node_md_disks{state="active"}) > 0)
+        for: 0m
+        labels:
+          severity: error
+        annotations:
+          summary: Host software RAID insufficient drives (instance {{ $labels.instance }})
+          description: "MD RAID array {{ $labels.device }} on {{ $labels.instance }} has insufficient drives remaining.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostSoftwareRAIDDiskFailure
+        expr: (node_md_disks{state="failed"} > 0)
+        for: 2m
+        labels:
+          severity: error
+        annotations:
+          summary: Host software RAID disk failure (instance {{ $labels.instance }})
+          description: "MD RAID array {{ $labels.device }} on {{ $labels.instance }} needs attention.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostPhysicalComponentTooHot
+        expr: node_hwmon_temp_celsius > node_hwmon_temp_max_celsius
+        for: 5m
+        labels:
+          severity: error
+        annotations:
+          summary: Host physical component too hot (instance {{ $labels.instance }})
+          description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
