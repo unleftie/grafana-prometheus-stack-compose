@@ -120,11 +120,6 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
       - /etc/machine-id:/etc/machine-id:ro
-    healthcheck:
-      test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:8080/healthz"]
-      interval: 120s
-      timeout: 5s
-      retries: 2
 
   blackbox-exporter:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_VERSION:-latest}
