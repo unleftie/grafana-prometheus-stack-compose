@@ -4,6 +4,7 @@ services:
   prometheus:
     image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 1G
     user: "nobody"
     env_file:
       - .env
@@ -32,6 +33,7 @@ services:
   alertmanager:
     image: prom/alertmanager:${ALERTMANAGER_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 256M
     user: "nobody"
     env_file:
       - .env
@@ -60,6 +62,7 @@ services:
   grafana:
     image: grafana/grafana:${GRAFANA_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 1G
     user: "472"
     depends_on:
       - prometheus
@@ -82,12 +85,14 @@ services:
   grafana-image-renderer:
     image: grafana/grafana-image-renderer:${GRAFANA_IMAGE_RENDERER_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 256M
     env_file:
       - .env
 
   loki:
     image: grafana/loki:${LOKI_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 512M
     env_file:
       - .env
     volumes:
@@ -100,6 +105,7 @@ services:
     container_name: ${PROJECT_TAG:-monitoring}-cadvisor
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 512M
     env_file:
       - .env
     cap_add:
@@ -124,6 +130,7 @@ services:
   blackbox-exporter:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_VERSION:-latest}
     restart: unless-stopped
+    mem_limit: 256M
     env_file:
       - .env
     volumes:
