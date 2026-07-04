@@ -12,7 +12,7 @@ services:
         "--config.file=/etc/prometheus/config.yml",
         "--log.level=warn",
         "--storage.tsdb.path=/prometheus",
-        "--storage.tsdb.retention.time=90d",
+        "--storage.tsdb.retention.time=180d",
         "--storage.tsdb.retention.size=20GB",
       ]
     volumes:
