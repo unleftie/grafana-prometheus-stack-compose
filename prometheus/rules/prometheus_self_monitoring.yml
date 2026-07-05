@@ -28,7 +28,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Prometheus target missing
+          summary: Prometheus target {{ $labels.job }} missing
           description: "A Prometheus target has disappeared. An exporter might be crashed.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: PrometheusAllTargetsMissing
@@ -46,7 +46,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Prometheus target missing with warmup time
+          summary: Prometheus target {{ $labels.job }} missing with warmup time
           description: "Allow a job time to start up (10 minutes) before alerting that it's down.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: PrometheusConfigurationReloadFailure
