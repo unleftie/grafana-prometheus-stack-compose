@@ -2,13 +2,13 @@
 groups:
   - name: node_exporter
     rules:
-      - alert: RebootRequired
+      - alert: HostRebootRequired
         expr: "node_reboot_required > 0"
         labels:
           severity: warning
         annotations:
-          description: "{{ $labels.instance }} requires a reboot."
-          summary: "Reboot required"
+          summary: Host reboot required
+          description: "{{ $labels.instance }} requires a reboot"
 
       - alert: HostHighCPULoad
         expr: 1 - (avg without (cpu) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > .90
