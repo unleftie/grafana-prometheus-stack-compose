@@ -46,7 +46,8 @@ route:
         - alertname
       group_interval: 15s
       group_wait: 15s
-      match:
+      match_re:
+        severity: critical|warning|info
         env: telegram_home
       receiver: telegram_home
       repeat_interval: 24h
@@ -56,7 +57,7 @@ route:
       group_interval: 15s
       group_wait: 15s
       match_re:
-        env: prod|dev
+        severity: critical|warning|info
         no_resolved: true
       receiver: telegram_default_no_resolved
       repeat_interval: 24h
@@ -66,6 +67,6 @@ route:
       group_interval: 15s
       group_wait: 15s
       match_re:
-        env: prod|dev
+        severity: critical|warning|info
       receiver: telegram_default
       repeat_interval: 24h

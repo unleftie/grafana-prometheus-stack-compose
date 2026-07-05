@@ -1,8 +1,8 @@
 {{ define "telegram_home.default" }}
 {{ range .Alerts }}
-{{ if eq .Status "firing" }}🚨 {{ "ТРИВОГА" }} 🚨 {{ else }}✅ {{ "ВІДБІЙ ТРИВОГИ" }} ✅ {{ end }}
-ПРОБЛЕМА: {{ .Annotations.summary }}
-СЕРВІС: {{ .Labels.service }}
-{{ if eq .Status "firing" }}ПОЧАТОК: {{ .StartsAt.Local }} {{ else }}ЗАКІНЧЕННЯ: {{ .EndsAt.Local }} {{ end }}
+{{ if eq .Status "firing" }}🚨 {{ "Тривога" }} 🚨 {{ else }}✅ {{ "Відбій тривоги" }} ✅ {{ end }}
+Проблема: {{ .Annotations.summary }}
+Сервіс: {{ .Labels.service }}
+{{ if eq .Status "firing" }}Початок: {{ .StartsAt.Local }} {{ else }}Закінчення: {{ .EndsAt.Local }} {{ end }}
 {{ end }}
 {{ end }}
