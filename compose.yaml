@@ -137,7 +137,8 @@ services:
       - ./blackbox-exporter/config.yml:/etc/blackbox_exporter/config.yml:ro
     ports:
       - "9115:9115"
-    command: ["--config.file=/etc/blackbox_exporter/config.yml"]
+    command:
+      ["--config.file=/etc/blackbox_exporter/config.yml", "--log.level=error"]
     healthcheck:
       test: ["CMD", "wget", "-O", "/dev/null", "http://localhost:9115/health"]
       interval: 120s
