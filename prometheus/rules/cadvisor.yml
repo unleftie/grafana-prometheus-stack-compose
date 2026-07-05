@@ -21,14 +21,14 @@ groups:
           summary: "cAdvisor {{ $labels.instance }} is down"
           description: "cAdvisor {{ $labels.instance }} has been down for more than 5m"
 
-      - alert: ContainerMemoryAlmostOutOfSpace
-        expr: 'sum(100 - (((container_spec_memory_limit_bytes{name=~".+",image!=""} != 0) - container_memory_usage_bytes{name=~".+",image!=""}) * 100 / container_spec_memory_limit_bytes{name=~".+",image!=""})) by (name, instance) > 95'
+      - alert: ContainerHighMemoryUsage
+        expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) / sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100) > 95
         for: 5m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "Container {{ $labels.name }} has less than 5% memory left"
-          description: 'Container {{ $labels.name }} on {{ $labels.instance }} has used {{ printf "%.2f" $value }}% of its memory limit for more than 5m'
+          description: "Container {{ $labels.name }} on {{ $labels.instance }} memory usage is above 95%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: ContainerRestarting
         expr: increase(container_start_time_seconds{name!=""}[10m]) > 0
