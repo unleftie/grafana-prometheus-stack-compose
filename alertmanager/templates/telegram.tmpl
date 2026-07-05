@@ -1,6 +1,6 @@
 {{ define "telegram.default" }}
 {{ range .Alerts }}
-{{ if eq .Status "firing" }}🚨 {{ .Status | toUpper }} 🚨 {{ else }}✅ {{ .Status | toUpper }} ✅ {{ end }}
+{{ if eq .Status "firing" }}{{ if eq .Labels.severity "critical" }}🔴{{ else if eq .Labels.severity "warning" }}🟠{{ else if eq .Labels.severity "info" }}🔵{{ else }}🚨{{ end }} {{ .Labels.severity | toUpper }} {{ else }}✅ {{ .Status | toUpper }} ✅ {{ end }}
 ALERTNAME: {{ .Labels.alertname }}
 SUMMARY: {{ .Annotations.summary }}
 SERVICE: {{ .Labels.service }}
