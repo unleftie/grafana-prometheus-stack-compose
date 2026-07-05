@@ -240,8 +240,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Host systemd service crashed
-          description: "systemd service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          summary: Host systemd service {{ $labels.name }} crashed
+          description: "systemd service {{ $labels.name }} crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostKernelVersionDeviations
         expr: changes(node_uname_info[1h]) > 0
