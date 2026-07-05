@@ -24,7 +24,7 @@ groups:
       # If all targets are down, PrometheusJobMissing or PrometheusAllTargetsMissing will fire instead.
       - alert: PrometheusTargetMissing
         expr: "up == 0 unless on(job) (sum by (job) (up) == 0)"
-        for: 1m
+        for: 5m
         labels:
           severity: critical
         annotations:
