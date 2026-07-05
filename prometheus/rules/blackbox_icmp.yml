@@ -2,7 +2,7 @@
 groups:
   - name: blackbox_icmp
     rules:
-      - alert: BlackboxIcmpEndpointDown
+      - alert: BlackboxIcmpProbeFailure
         expr: "probe_success{job='blackbox_icmp'} == 0"
         for: 5m
         labels:
@@ -11,7 +11,7 @@ groups:
           summary: "ICMP probe failure"
           description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5m"
 
-      - alert: BlackboxSlowIcmp
+      - alert: BlackboxIcmpProbeHighLatency
         expr: "avg_over_time(probe_icmp_duration_seconds[1m]) > 1"
         for: 5m
         labels:

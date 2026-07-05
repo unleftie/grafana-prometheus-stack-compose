@@ -2,7 +2,7 @@
 groups:
   - name: blackbox_http
     rules:
-      - alert: BlackboxHttpEndpointDown
+      - alert: BlackboxHttpProbeFailure
         expr: "probe_http_status_code <= 199 OR probe_http_status_code >= 400"
         for: 5m
         labels:
@@ -11,7 +11,7 @@ groups:
           summary: "HTTP probe failure"
           description: "HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: BlackboxSlowHttp
+      - alert: BlackboxHttpProbeHighLatency
         expr: "avg_over_time(probe_http_duration_seconds[1m]) > 1"
         for: 5m
         labels:
