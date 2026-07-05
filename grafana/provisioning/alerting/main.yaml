@@ -59,13 +59,11 @@ policies:
         continue: false
         matchers:
           - no_resolved = true
-          - severity = error
           - receiver = telegram
 
       - receiver: telegram
         continue: false
         matchers:
-          - severity = error
           - receiver = telegram
 
 templates:

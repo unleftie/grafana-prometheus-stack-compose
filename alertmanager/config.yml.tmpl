@@ -58,7 +58,6 @@ route:
       match_re:
         env: prod|dev
         no_resolved: true
-        severity: error
       receiver: telegram_default_no_resolved
       repeat_interval: 24h
     - group_by:
@@ -68,6 +67,5 @@ route:
       group_wait: 15s
       match_re:
         env: prod|dev
-        severity: error
       receiver: telegram_default
       repeat_interval: 24h

@@ -53,7 +53,7 @@ groups:
           summary: "A new SSH session was opened"
           description: "A new SSH session was opened by user {{ $labels.user }} from IP {{ $labels.ip }}."
         labels:
-          severity: error
+          severity: critical
           receiver: telegram
           no_resolved: true
         isPaused: false

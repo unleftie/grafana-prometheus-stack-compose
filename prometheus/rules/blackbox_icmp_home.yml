@@ -5,6 +5,6 @@ groups:
         expr: "probe_success{job='blackbox_icmp_home', env='telegram_home'} == 0"
         for: 5m
         labels:
-          severity: error
+          severity: critical
         annotations:
           summary: "Немає зв`язку з домашнім роутером більш ніж 5 хвилин"
