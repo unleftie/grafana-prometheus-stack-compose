@@ -62,5 +62,5 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Blackbox configuration reload failure (instance {{ $labels.instance }})
+          summary: Blackbox configuration reload failure
           description: "Blackbox configuration reload failure\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
