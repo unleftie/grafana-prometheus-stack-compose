@@ -1,4 +1,4 @@
-# https://samber.github.io/awesome-prometheus-alerts/rules#host-and-hardware
+# https://samber.github.io/awesome-prometheus-alerts/rules/basic-resource-monitoring/host-and-hardware/
 groups:
   - name: node_exporter
     rules:
@@ -10,124 +10,151 @@ groups:
           description: "{{ $labels.instance }} requires a reboot."
           summary: "Reboot required"
 
-      - alert: InstanceHighCpuUsage
-        expr: '100 - (avg by (instance, env, service) (rate(node_cpu_seconds_total{mode="idle"}[10m])) * 100) > 90'
+      - alert: HostHighCPULoad
+        expr: 1 - (avg without (cpu) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > .90
+        for: 10m
         labels:
-          severity: critical
+          severity: warning
         annotations:
-          summary: "CPU usage is at 90%"
+          summary: Host high CPU load
+          description: "CPU load is > 90%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceRamSpaceFillingUp
-        expr: "node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 15"
+      # You may want to increase the alert manager 'repeat_interval' for this type of alert to daily or weekly
+      - alert: HostCPUIsUnderutilized
+        expr: (min without (cpu) (rate(node_cpu_seconds_total{mode="idle"}[1h]))) > 0.8
+        for: 2w
+        labels:
+          severity: info
+        annotations:
+          summary: Host CPU is underutilized
+          description: "CPU load has been < 20% for 2 weeks. Consider reducing the number of CPUs.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostCPUHighIowait
+        expr: avg without (cpu) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) > .10
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host CPU high iowait
+          description: "CPU iowait > 10%. Your CPU is idling waiting for storage to respond.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostCPUStealNoisyNeighbor
+        expr: avg without (cpu) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 > 10
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host CPU steal noisy neighbor
+          description: "CPU steal is > 10%. A noisy neighbor is killing VM performances or a spot instance may be out of credit.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostAlmostOutOfMemory
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < .15)
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: "RAM memory has less than 15% space left"
+          summary: Host almost out of memory
+          description: "Node memory is filling up (< 15% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceRamOutOfSpace
-        expr: "node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 5"
+      - alert: HostOutOfMemory
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < .5)
         for: 5m
         labels:
           severity: critical
         annotations:
-          summary: "RAM memory has less than 5% space left"
+          summary: Host out of memory
+          description: "Node memory is filling up (< 5% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceFilesystemSpaceFillingUp
-        annotations:
-          description: 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up.'
-          summary: "Filesystem is predicted to run out of space within the next 24 hours"
-        expr: "(\n  node_filesystem_avail_bytes{fstype!=\"\"} / node_filesystem_size_bytes{fstype!=\"\"} * 100 < 40\nand\n  predict_linear(node_filesystem_avail_bytes{fstype!=\"\"}[6h], 24*60*60) < 0\nand\n  node_filesystem_readonly{fstype!=\"\"} == 0\n)\n"
-        for: 1h
+      # You may want to increase the alert manager 'repeat_interval' for this type of alert to daily or weekly
+      - alert: HostMemoryIsUnderutilized
+        expr: min_over_time(node_memory_MemFree_bytes[2w]) > node_memory_MemTotal_bytes * .8
+        for: 0m
         labels:
-          severity: warning
-
-      - alert: InstanceFilesystemSpaceFillingUp
+          severity: info
         annotations:
-          description: 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up fast.'
-          summary: "Filesystem is predicted to run out of space within the next 12 hours"
-        expr: "(\n  node_filesystem_avail_bytes{fstype!=\"\"} / node_filesystem_size_bytes{fstype!=\"\"} * 100 < 20\nand\n  predict_linear(node_filesystem_avail_bytes{fstype!=\"\"}[6h], 12*60*60) < 0\nand\n  node_filesystem_readonly{fstype!=\"\"} == 0\n)\n"
-        for: 1h
-        labels:
-          severity: critical
+          summary: Host Memory is underutilized
+          description: "Node memory usage is < 20% for 2 weeks. Consider reducing memory space.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceFilesystemAlmostOutOfSpace
-        annotations:
-          description: 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.'
-          summary: "Filesystem has less than 15% space left"
-        expr: "(\n  node_filesystem_avail_bytes{fstype!=\"\"} / node_filesystem_size_bytes{fstype!=\"\"} * 100 < 15\nand\n  node_filesystem_readonly{fstype!=\"\"} == 0\n)\n"
-        for: 5m
-        labels:
-          severity: warning
-
-      - alert: InstanceFilesystemOutOfSpace
-        annotations:
-          description: 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.'
-          summary: "Filesystem has less than 5% space left"
-        expr: "(\n  node_filesystem_avail_bytes{fstype!=\"\"} / node_filesystem_size_bytes{fstype!=\"\"} * 100 < 5\nand\n  node_filesystem_readonly{fstype!=\"\"} == 0\n)\n"
-        for: 5m
-        labels:
-          severity: critical
-
-      - alert: InstanceSwapSpaceFillingUp
-        expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 70
+      - alert: HostSwapIsFillingUp
+        expr: ((1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80) and node_memory_SwapTotal_bytes > 0
         for: 2m
         labels:
           severity: warning
         annotations:
-          summary: "Swap memory has less than 30% space left"
+          summary: Host swap is filling up
+          description: "Swap is filling up (>80%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceSwapOutOfSpace
-        expr: "(1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 90"
+      - alert: HostUnusualNetworkThroughputIn
+        expr: ((rate(node_network_receive_bytes_total[5m]) / node_network_speed_bytes) > .90) and node_network_speed_bytes > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host unusual network throughput in
+          description: "Host receive bandwidth is high (>90%).\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostUnusualNetworkThroughputOut
+        expr: ((rate(node_network_transmit_bytes_total[5m]) / node_network_speed_bytes) > .90) and node_network_speed_bytes > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host unusual network throughput out
+          description: "Host transmit bandwidth is high (>90%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostNetworkReceiveErrors
+        expr: (rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01) and rate(node_network_receive_packets_total[2m]) > 0
         for: 2m
         labels:
-          severity: critical
+          severity: warning
         annotations:
-          summary: "Swap memory has less than 10% space left"
+          summary: Host Network Receive Errors
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last two minutes.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: InstanceNetworkReceiveErrors
-        annotations:
-          description: '{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} receive errors in the last two minutes.'
-          summary: "Network interface '{{ $labels.device }}' is reporting many receive errors"
-        expr: "increase(node_network_receive_errs_total[2m]) > 10\n"
-        for: 1h
+      - alert: HostNetworkTransmitErrors
+        expr: (rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01) and rate(node_network_transmit_packets_total[2m]) > 0
+        for: 2m
         labels:
-          severity: critical
-
-      - alert: InstanceNetworkTransmitErrors
+          severity: warning
         annotations:
-          description: '{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} transmit errors in the last two minutes.'
-          summary: "Network interface '{{ $labels.device }}' is reporting many transmit errors"
-        expr: "increase(node_network_transmit_errs_total[2m]) > 10\n"
-        for: 1h
+          summary: Host Network Transmit Errors
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last two minutes.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostNetworkBondDegraded
+        expr: ((node_bonding_active - node_bonding_slaves) != 0)
+        for: 2m
         labels:
-          severity: critical
-
-      - alert: InstanceHighNumberConntrackEntriesUsed
+          severity: warning
         annotations:
-          description: "{{ $value | humanizePercentage }} of conntrack entries are used"
-          summary: "Number of conntrack are getting close to the limit"
-        expr: "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75\n"
+          summary: Host Network Bond Degraded
+          description: "Bond \"{{ $labels.device }}\" degraded on \"{{ $labels.instance }}\".\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostConntrackLimit
+        expr: (node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8) and node_nf_conntrack_entries_limit > 0
+        for: 5m
         labels:
-          severity: critical
-
-      - alert: InstanceClockSkewDetected
+          severity: warning
         annotations:
-          description: "Clock skew detected. Clock is out of sync. Ensure NTP is configured correctly on this host.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-          summary: Host clock skew
+          summary: Host conntrack limit
+          description: "The number of conntrack is approaching limit\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostClockSkew
         expr: ((node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0))
         for: 10m
         labels:
-          severity: critical
-
-      - alert: InstanceClockNotSynchronising
+          severity: warning
         annotations:
-          description: "Clock on {{ $labels.instance }} is not synchronising. Ensure NTP is configured on this host."
-          summary: Host clock not synchronising
+          summary: Host clock skew
+          description: "Clock skew detected. Clock is out of sync. Ensure NTP is configured correctly on this host.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostClockNotSynchronising
         expr: (min_over_time(node_timex_sync_status[1m]) == 0 and node_timex_maxerror_seconds >= 16)
-        for: 20m
+        for: 2m
         labels:
-          severity: critical
+          severity: warning
+        annotations:
+          summary: Host clock not synchronising
+          description: "Clock not synchronising. Ensure NTP is configured on this host.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostOutOfInodes
         expr: (node_filesystem_files_free / node_filesystem_files < .10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0)
@@ -174,29 +201,44 @@ groups:
           summary: Host unusual disk write latency
           description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: HostCpuHighIowait
-        expr: avg by (instance) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) > .10
+      # Please add ignored mountpoints in node_exporter parameters like
+      # "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run)($|/)".
+      # Same rule using "node_filesystem_free_bytes" will fire when disk fills for non-root users.
+      - alert: HostDiskMayFillIn24Hours
+        expr: predict_linear(node_filesystem_avail_bytes{fstype!~"^(fuse.*|tmpfs|cifs|nfs)"}[3h], 86400) <= 0 and node_filesystem_avail_bytes > 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host disk may fill in 24 hours
+          description: "Filesystem will likely run out of space within the next 24 hours.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostDiskIOUtilizationHigh
+        expr: (rate(node_disk_io_time_seconds_total[5m]) > .80)
         for: 0m
         labels:
-          severity: critical
+          severity: warning
         annotations:
-          summary: Host CPU high iowait
-          description: "CPU iowait > 10%. Your CPU is idling waiting for storage to respond.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          summary: Host disk IO utilization high
+          description: "Disk utilization is high (> 80%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-      - alert: HostUnusualDiskIo
-        expr: rate(node_disk_io_time_seconds_total[5m]) > 0.8
-        for: 5m
+      # Please add ignored mountpoints in node_exporter parameters like
+      # "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run)($|/)".
+      # Same rule using "node_filesystem_free_bytes" will fire when disk fills for non-root users.
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes{fstype!~"^(fuse.*|tmpfs|cifs|nfs)"} / node_filesystem_size_bytes < .10 and on (instance, device, mountpoint) node_filesystem_readonly == 0)
+        for: 2m
         labels:
           severity: critical
         annotations:
-          summary: Host unusual disk IO
-          description: "Disk usage >80%. Check storage for issues or increase IOPS capabilities. Check storage for issues.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          summary: Host out of disk space
+          description: "Disk is almost full (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostSystemdServiceCrashed
         expr: (node_systemd_unit_state{state="failed"} == 1)
         for: 0m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: Host systemd service crashed
           description: "systemd service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
@@ -211,10 +253,10 @@ groups:
           description: "Kernel version for {{ $labels.instance }} has changed.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostOomKillDetected
-        expr: (increase(node_vmstat_oom_kill[1m]) > 0)
+        expr: (delta(node_vmstat_oom_kill[30m]) > 0)
         for: 0m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: Host OOM kill detected
           description: "OOM kill detected\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
@@ -225,7 +267,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Host node overtemperature alarm (instance {{ $labels.instance }})
+          summary: Host node overtemperature alarm
           description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostSoftwareRAIDInsufficientDrives
@@ -234,7 +276,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Host software RAID insufficient drives (instance {{ $labels.instance }})
+          summary: Host software RAID insufficient drives
           description: "MD RAID array {{ $labels.device }} on {{ $labels.instance }} has insufficient drives remaining.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostSoftwareRAIDDiskFailure
@@ -243,7 +285,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Host software RAID disk failure (instance {{ $labels.instance }})
+          summary: Host software RAID disk failure
           description: "MD RAID array {{ $labels.device }} on {{ $labels.instance }} needs attention.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostPhysicalComponentTooHot
@@ -252,5 +294,23 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Host physical component too hot (instance {{ $labels.instance }})
+          summary: Host physical component too hot
           description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostEDACCorrectableErrorsDetected
+        expr: (increase(node_edac_correctable_errors_total[1m]) > 0)
+        for: 0m
+        labels:
+          severity: info
+        annotations:
+          summary: Host EDAC Correctable Errors detected
+          description: "Host {{ $labels.instance }} has had {{ printf \"%.0f\" $value }} correctable memory errors reported by EDAC in the last 1 minute.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: HostEDACUncorrectableErrorsDetected
+        expr: (node_edac_uncorrectable_errors_total > 0)
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: Host EDAC Uncorrectable Errors detected
+          description: "Host {{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
