@@ -72,9 +72,10 @@ templates:
     template: |
       {{ define "telegram.default" }}
       {{ range .Alerts }}
-      {{ if eq .Status "firing" }}🚨 {{ .Status | toUpper }} 🚨 {{ else }}✅ {{ .Status | toUpper }} ✅ {{ end }}
-      ALERTNAME: {{ .Labels.alertname }}
-      {{ if .Annotations.description }}DESCRIPTION: {{ .Annotations.description }}{{ end }}
-      {{ if eq .Status "firing" }}STARTS AT: {{ .StartsAt.Local }} {{ else }}ENDS AT: {{ .EndsAt.Local }} {{ end }}
+      {{ if eq .Status "firing" }}Severity: {{ .Labels.severity | title }} {{ if eq .Labels.severity "critical" }}🚨{{ else if eq .Labels.severity "warning" }}⚠️{{ else if eq .Labels.severity "info" }}ℹ️{{ else }}🚨{{ end }}{{ else }}Resolved ✅{{ end }}
+
+      Summary: {{ .Annotations.summary }}
+      Service: {{ .Labels.service }}
+      {{ if eq .Status "firing" }}Starts at: {{ .StartsAt.Local }} {{ else }}Ends at: {{ .EndsAt.Local }} {{ end }}
       {{ end }}
       {{ end }}
