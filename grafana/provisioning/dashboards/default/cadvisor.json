@@ -1300,7 +1300,7 @@
         "kind": "Panel",
         "spec": {
           "id": 26,
-          "title": "Reads",
+          "title": "Writes",
           "description": "",
           "links": [],
           "data": {
@@ -1793,7 +1793,7 @@
         "kind": "Panel",
         "spec": {
           "id": 5,
-          "title": "Memory usage per container",
+          "title": "Memory usage per container (with cached memory)",
           "description": "Preferred way to view memory usage, Portainer also uses this method compared to showing RSS memory usage.\n\n**NOTE**: This graph joins all containers with the same name together sometimes causing visible memory usage spikes (on the graph) when recreating containers. Toggle the `Split Containers` query in the panel editing UI to change this behavior.",
           "links": [],
           "data": {
